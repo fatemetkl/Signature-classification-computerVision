@@ -2,7 +2,7 @@
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 import numpy as np
-
+from sklearn.metrics import precision_recall_fscore_support
 class neuralnet:
     def __init__(self,layer):
         self.layer=layer
@@ -10,13 +10,14 @@ class neuralnet:
     def train(self,X_train,y_train):
         # Neural network
         model = Sequential()
-        model.add(Dense(20, input_dim=25, activation="relu"))
-        model.add(Dense(15, activation="relu"))
+        model.add(Dense(100, input_dim=33, activation="relu"))
+        model.add(Dense(64, activation="relu"))
+        model.add(Dense(64, activation="relu"))
         model.add(Dense(10, activation="softmax"))
 
         model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-        history = model.fit(X_train, y_train, epochs=100, batch_size=60)
+        history = model.fit(X_train, y_train, epochs=100, batch_size=70)
 
         return model
 
@@ -36,5 +37,12 @@ class neuralnet:
 
         from sklearn.metrics import accuracy_score
         a = accuracy_score(pred, test)
-        print('Accuracy is:', a * 100)
+        from sklearn.metrics import confusion_matrix
+        cm = confusion_matrix(test, pred)
+        print("############### neural network confusion matrix###################")
+        print(cm)
+
+        print("precision - recall - fscore : ",precision_recall_fscore_support(test, pred, average='macro'))
+
+        return (a * 100)
 
